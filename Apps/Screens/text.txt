@@ -1,0 +1,6 @@
+ <View style={{marginVertical:5, marginHorizontal:2,flex:1,alignItems:'flex-start'}}>
+    <TouchableOpacity onPress={onClose} style={{backgroundColor:'rgb(0,191,255)',borderRadius:5,padding:4,  flexDirection:'row',alignItems:'flex-start',paddingHorizontal:5,marginBottom:5}}>
+      <Text></Text>
+      <Text style={{fontSize:20,fontWeight:'bold', marginLeft:5}}>Blogs</Text>
+    </TouchableOpacity>
+  </View>
