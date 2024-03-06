@@ -14,7 +14,7 @@ const SignUp = () => {
                   <Text style={styles.heading}>Welcome to signup form</Text>
                   <Text style={{textAlign:'justify',color:'white'}}>
                     Embark on a musical journey like never before! Sign up today to unlock a world of harmonious
-                    possibilities. Whether you're a budding musician or a seasoned pro, our platform is tailored to meet
+                    possibilities. Whether you're a musician or a seasoned pro, our platform is tailored to meet
                     your musical aspirations.
                   </Text>
                 </View>
