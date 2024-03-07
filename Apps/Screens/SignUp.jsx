@@ -1,11 +1,51 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text,Image, TextInput, TouchableOpacity, ImageBackground, StyleSheet,Alert } from 'react-native';
+import { Feather,MaterialIcons } from '@expo/vector-icons';
 import CheckBox from '@react-native-community/checkbox';
+import Google from '../App_assests/Google.png';
+import Facebook from '../App_assests/Facebook.png';
+import Twitter from '../App_assests/Twitter.png';
 
-const SignUp = () => {
+const SignUp = ({onClose}) => {
+  const [loginData, setLoginData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    ph_no: '',
+    address: '',
+  });
+  const handleInputChange = (fieldName, value) => {
+    setLoginData({ ...loginData, [fieldName]: value });
+  };
+
+  const handleLoginPress = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!loginData.email||!loginData.password||!loginData.name||!loginData.ph_no||!loginData.address){
+      Alert.alert('Invalid User Details', 'Please enter a valid details to create account');
+      return;
+    }
+    if (loginData.password.length<8) {
+      Alert.alert('Pasword Characters', 'Password characters should be greater than 8.');
+      return;
+    }
+    if (!emailRegex.test(loginData.email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address');
+      return;
+    }
+    console.log(loginData);
+  };
+  
   return (
     <View style={styles.section}>
       <ImageBackground source={require('../App_assests/radio.jpg')} style={styles.backgroundImage}>
+      <View style={{marginVertical:5, marginTop:5,flex:1,alignItems:'center'}}>
+    <TouchableOpacity onPress={onClose} style={{borderRadius:5,paddingHorizontal:4,paddingVertical:2, flexDirection:'column',alignItems:'center',paddingHorizontal:5,}}>
+      <Text style={{fontSize:20,fontWeight:'bold',color:'white',  borderBottomWidth: 2,
+  borderBottomColor: 'white', }}>Back</Text>
+      <Text><Feather name="arrow-down" size={20} color="white" /></Text>
+    </TouchableOpacity>
+  </View>
+       
         <View style={styles.container}>
           <View style={styles.row}>
             <View style={styles.wrap}>
@@ -24,23 +64,32 @@ const SignUp = () => {
                 <View style={styles.signupForm}>
                   <View style={styles.formGroup}>
                     <Text style={styles.label}>Full Name</Text>
-                    <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor="white"/>
+                    <TextInput style={styles.input}
+                     onChangeText={(text) => handleInputChange('name', text)} placeholder="Full Name" placeholderTextColor="white"/>
                   </View>
                   <View style={styles.formGroup}>
                     <Text style={styles.label}>Email Address</Text>
-                    <TextInput style={styles.input} placeholder="johndoe@email.com" keyboardType="email-address" placeholderTextColor="white"/>
+                    <TextInput style={styles.input} 
+                    onChangeText={(text) => handleInputChange('email', text)}
+                    placeholder="johndoe@email.com" keyboardType="email-address" placeholderTextColor="white"/>
                   </View>
                   <View style={styles.formGroup}>
                     <Text style={styles.label}>Password</Text>
-                    <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} placeholderTextColor="white"/>
+                    <TextInput style={styles.input}
+                    onChangeText={(text) => handleInputChange('password', text)}
+                    placeholder="Password" secureTextEntry={true} placeholderTextColor="white"/>
                   </View>
                   <View style={styles.formGroup}>
                     <Text style={styles.label}>Phone no.</Text>
-                    <TextInput style={styles.input} placeholder="+91" keyboardType="phone-pad" placeholderTextColor="white"/>
+                    <TextInput style={styles.input} 
+                    onChangeText={(text) => handleInputChange('ph_no', text)}
+                    placeholder="+91" keyboardType="phone-pad" placeholderTextColor="white"/>
                   </View>
                   <View style={styles.formGroup}>
                     <Text style={styles.label}>Address</Text>
-                    <TextInput style={styles.input} placeholder="Address" placeholderTextColor="white"/>
+                    <TextInput style={styles.input} 
+                    onChangeText={(text) => handleInputChange('address', text)}
+                    placeholder="Address" placeholderTextColor="white"/>
                   </View>
                   <View style={styles.formGroup}>
                     <View style={styles.checkboxContainer}>
@@ -48,9 +97,9 @@ const SignUp = () => {
                       <Text style={styles.checkboxLabel}>I agree all statements in terms of service</Text>
                     </View>
                   </View>
-                  <View style={styles.formGroup}>
-                    <TouchableOpacity style={styles.createAccountButton}>
-                      <Text style={styles.createAccountButtonText}>Create an account</Text>
+                  <View style={styles.buttonstyle}>
+                    <TouchableOpacity style={styles.createAccountButton} onPress={handleLoginPress}>
+                      <Text style={styles.createAccountButtonText}>Create account</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -59,23 +108,30 @@ const SignUp = () => {
                   <Text style={styles.socialMediaText}>Signup with this services</Text>
                   <View style={styles.socialMedia}>
                     <TouchableOpacity style={[styles.socialIcon, styles.googleIcon]}>
-                      <Text style={styles.iconText}>G</Text>
+                    <Image source={Google} style={styles.googleIcon} />
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.socialIcon, styles.facebookIcon]}>
-                      <Text style={styles.iconText}>F</Text>
+                    <Image source={Facebook} style={styles.facebookIcon}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.socialIcon, styles.twitterIcon]}>
-                      <Text style={styles.iconText}>T</Text>
+                    <Image source={Twitter} style={styles.twitterIcon}/>
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={styles.textCenter}>
+                {/* <View style={styles.textCenter}>
                   <Text style={styles.loginLink}>I'm already a member! Login</Text>
-                </View>
+                </View> */}
               </View>
             </View>
           </View>
         </View>
+        <View style={{marginBottom:25,flex:1,alignItems:'center',marginVertical:15}}>
+    <TouchableOpacity onPress={onClose} style={{borderRadius:5,padding:4, flexDirection:'row',paddingHorizontal:5,marginBottom:5}}>
+      <Text></Text>
+      <Text style={{fontSize:20,fontWeight:'bold', marginLeft:5,color:'white',borderBottomWidth: 2,
+  borderBottomColor: 'white',}}>Already a Member / Log In</Text>
+    </TouchableOpacity>
+  </View>
       </ImageBackground>
     </View>
   );
@@ -112,9 +168,10 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 7,
     color:'white',
-    fontWeight:'bold'
+    fontWeight:'bold',
+    textAlign:'center'
   },
   loginWrap: {
     // padding: 15,
@@ -134,18 +191,24 @@ const styles = StyleSheet.create({
   formGroup: {
     marginBottom: 15,
   },
+  buttonstyle:{
+    fledx:1,
+    alignItems:'center',
+  },
   label: {
     color:'white',
     fontWeight:'bold',
     fontSize:15,
     marginBottom: 5,
+    marginLeft:15,
   },
   input: {
     borderWidth: 1,
     borderColor: 'white',
     borderRadius: 25,
     padding: 10,
-    color:'red',
+    color:'white',
+    
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -155,17 +218,22 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkboxLabel: {
+    color:'white',
+    fontSize:15,
+    fontWeight:'bold',
     flex: 1,
+    marginLeft:15,
   },
   createAccountButton: {
-    backgroundColor: 'white',
+    backgroundColor: 'blueviolet',
+    color:'white',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
   },
   createAccountButtonText: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -173,11 +241,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   or: {
+    color:'white',
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom: 7,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   socialMediaText: {
-    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+    color:'white',
+    marginBottom: 7,
   },
   socialMedia: {
     flexDirection: 'row',
@@ -192,13 +266,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   googleIcon: {
-    backgroundColor: '#DD4B39',
+    // backgroundColor: '#DD4B39',
+    marginTop:5,
+    marginHorizontal:10,
   },
   facebookIcon: {
-    backgroundColor: '#3B5998',
+    marginTop:5,
+    marginHorizontal:10,
+    // backgroundColor: '#3B5998',
   },
   twitterIcon: {
-    backgroundColor: '#55ACEE',
+    marginTop:5,
+    marginHorizontal:10,
+    // backgroundColor: '#55ACEE',
   },
   iconText: {
     color: 'white',
@@ -209,8 +289,9 @@ const styles = StyleSheet.create({
   },
   loginLink: {
     marginTop: 20,
-    fontSize: 16,
-    color: 'blue',
+    fontSize: 18,
+    fontWeight:'bold',
+    color: 'white',
   },
 });
 
