@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput,ScrollView, TouchableOpacity, Image, StyleSheet, Modal ,Alert} from 'react-native';
 import { FontAwesome,Ionicons,MaterialIcons} from '@expo/vector-icons';
 import SignUp from './SignUp';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../Redux/action'
 const Login = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [loginData, setLoginData] = useState({ email: '', password: '' });
-
+    const dispatch = useDispatch();
     const handleBlogPress = () => {
         // setSelectedBlogId(blogId);
         setModalVisible(true);
@@ -15,16 +17,17 @@ const Login = () => {
         setLoginData({ ...loginData, [fieldName]: value });
       };
     
-      const handleLoginPress = () => {
+      const handleLoginPress = async() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!loginData.email||!loginData.password){
-          Alert.alert('Invalid Login Details', 'Please enter a valid email address and Password');
+          Alert.alert('Invalid Login Details', 'Please enter a valid User Credentials');
           return;
         }
         if (!emailRegex.test(loginData.email)) {
           Alert.alert('Invalid Email', 'Please enter a valid email address');
           return;
         }
+        dispatch(setUserData(loginData));
         console.log(loginData);
       };
     
@@ -63,7 +66,7 @@ const Login = () => {
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-                <Text style={styles.loginButtonText}>Login</Text>
+                <Text style={styles.loginButtonText}>Log In</Text>
               </TouchableOpacity>
             </View>
 
@@ -151,14 +154,14 @@ const styles = StyleSheet.create({
   positionabsolute:{
    position:'absolute',
    top:'25%',
-   left:'2%'
+   left:'5%',
   },
   input: {
     borderWidth: 1,
     borderColor: 'rgb(105,105,105)',
     borderRadius: 25,
     paddingVertical:10,
-    paddingLeft:35
+    paddingLeft:50
   },
   buttonContainer: {
     alignItems: 'center',

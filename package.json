@@ -35,6 +35,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^15.1.0",
     "react-native-tailwindcss": "^1.1.11",
+    "react-redux": "^9.1.0",
+    "redux": "^5.0.1",
     "tailwind-react-native-classnames": "^1.5.1"
   },
   "devDependencies": {

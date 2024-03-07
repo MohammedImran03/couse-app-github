@@ -1,3 +1,6 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { removeUserData } from '../Redux/action';
 import "react-native-gesture-handler";
 import { View, Text, TouchableOpacity ,Picker} from "react-native";
 import {
@@ -11,7 +14,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
 import { Home,About,Blogs,Course,Contacts,SignUp,Login  } from "../Route";
 
-export default function Header(){
+const Header = ({ userData, removeUserData }) => {
+
+  const handleLogout = () => {
+    removeUserData();
+  };
+
 
   const Drawer = createDrawerNavigator();
   return (
@@ -40,7 +48,8 @@ export default function Header(){
                       fontWeight: "bold",
                       color: "white"
                     }}
-                  >Isabella Joanna</Text>
+                  >{userData ? `${userData.email}` : 'Welcome!'}</Text>
+                  <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity>
                 </View>
                 <DrawerItemList {...props} />
               </SafeAreaView>
@@ -137,6 +146,7 @@ export default function Header(){
           }}
           component={Contacts}
         /> 
+        {!userData && 
         <Drawer.Screen
           name="Join Now"
           options={{
@@ -148,11 +158,23 @@ export default function Header(){
           }}
           component={Login}
         /> 
-
+           }
+           {/* {userData &&   <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity>     
+        } */}
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userData: state.userData,
+});
+
+const mapDispatchToProps = {
+  removeUserData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
 
 
 

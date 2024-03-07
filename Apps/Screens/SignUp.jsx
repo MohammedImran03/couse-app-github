@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Text,Image, TextInput, TouchableOpacity, ImageBackground, StyleSheet,Alert } from 'react-native';
 import { Feather,MaterialIcons } from '@expo/vector-icons';
 import CheckBox from '@react-native-community/checkbox';
