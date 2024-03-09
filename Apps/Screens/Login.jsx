@@ -1,12 +1,16 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, TextInput,ScrollView, TouchableOpacity, Image, StyleSheet, Modal ,Alert} from 'react-native';
-import { FontAwesome,Ionicons,MaterialIcons} from '@expo/vector-icons';
+import { View, Text, TextInput,ScrollView, TouchableOpacity, ToastAndroid,Image, StyleSheet, Modal ,Alert} from 'react-native';
+import { FontAwesome,Ionicons,MaterialIcons,Feather,FontAwesome6} from '@expo/vector-icons';
 import SignUp from './SignUp';
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../Redux/action'
+import { setUserData } from '../Redux/action';
+
+import {userLogin} from '../apis/user.api';
 const Login = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [loginData, setLoginData] = useState({ email: '', password: '' });
+    const [loader, setLoader] = useState(false);
+    const [tickmark, setTickmark] = useState(false);
     const dispatch = useDispatch();
     const handleBlogPress = () => {
         // setSelectedBlogId(blogId);
@@ -27,9 +31,38 @@ const Login = () => {
           Alert.alert('Invalid Email', 'Please enter a valid email address');
           return;
         }
-        dispatch(setUserData(loginData));
-        console.log(loginData);
-      };
+
+        try {
+          setLoader(true);
+          const isAuth = await userLogin(loginData);
+          //  console.log(isAuth);
+          if (isAuth.success === false) {
+            setLoader(false);
+            Alert.alert('Log In Failed', isAuth.message);
+            return;
+          }
+          if(isAuth.success === true){
+            ToastAndroid.show('Logged In Successfully', ToastAndroid.SHORT);
+            setLoader(false);
+            setTickmark(true);
+             dispatch(setUserData(isAuth.data));
+setTimeout(()=>{
+  setTickmark(false);
+},2000)
+          } 
+
+        } catch (error) {
+          setLoader(false);
+          // console.log(error)
+            if(error.response){
+              Alert.alert('Log In Failed', error.response.data.message);
+              return;
+            }else{
+              Alert.alert('Log In Failed', error.message);
+              return;
+            }
+          }
+        };
     
 
   return (
@@ -66,7 +99,7 @@ const Login = () => {
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-                <Text style={styles.loginButtonText}>Log In</Text>
+               {loader? <Feather name="loader" size={20} color="white" /> :tickmark?<FontAwesome6 name="circle-check" size={20} color="white" style={{backgroundColor:'green'}} />: <Text style={styles.loginButtonText}>Log In</Text>}
               </TouchableOpacity>
             </View>
 

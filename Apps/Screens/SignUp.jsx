@@ -5,6 +5,8 @@ import CheckBox from '@react-native-community/checkbox';
 import Google from '../App_assests/Google.png';
 import Facebook from '../App_assests/Facebook.png';
 import Twitter from '../App_assests/Twitter.png';
+import { userRegistration } from '../apis/user.api';
+
 
 const SignUp = ({onClose}) => {
   const [loginData, setLoginData] = useState({
@@ -18,7 +20,9 @@ const SignUp = ({onClose}) => {
     setLoginData({ ...loginData, [fieldName]: value });
   };
 
-  const handleLoginPress = () => {
+  const [loader, setLoader] = useState(false);
+
+  const handleLoginPress =async() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if(!loginData.email||!loginData.password||!loginData.name||!loginData.ph_no||!loginData.address){
       Alert.alert('Invalid User Details', 'Please enter a valid details to create account');
@@ -32,7 +36,33 @@ const SignUp = ({onClose}) => {
       Alert.alert('Invalid Email', 'Please enter a valid email address');
       return;
     }
-    console.log(loginData);
+    try {
+      setLoader(true);
+      const result = await userRegistration(loginData);
+      console.log(result);
+     if(result.success === true){
+      setLoader(false);
+      Alert.alert('Account Creation Success:', result.message);
+      return;
+     }else{
+      setLoader(false);
+      Alert.alert('Account Creation Satus:', result.response.data.message);
+      return;
+     }
+      
+    } catch (error) {
+      setLoader(false);
+      // console.log(error);
+      if(error.response){
+        Alert.alert('Account Creation Failed', error.response.data.message);
+        return;
+      }
+      else{
+        Alert.alert('Account Creation Failed', `${error.message}, Please Try again later`);
+        return;
+      }
+    }
+    // console.log(loginData);
   };
   
   return (
@@ -99,7 +129,7 @@ const SignUp = ({onClose}) => {
                   </View>
                   <View style={styles.buttonstyle}>
                     <TouchableOpacity style={styles.createAccountButton} onPress={handleLoginPress}>
-                      <Text style={styles.createAccountButtonText}>Create account</Text>
+                     {loader?<Feather name="loader" size={20} color="white" /> : <Text style={styles.createAccountButtonText}>Create account</Text>}
                     </TouchableOpacity>
                   </View>
                 </View>

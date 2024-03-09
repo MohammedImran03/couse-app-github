@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import OtherPage from "./Screens/otherpage";
 import SignUp from "./Screens/SignUp";
 import Login from "./Screens/Login";
+import MyCourses from "./Screens/MyCourses";
 const Stack = createStackNavigator();
 
 const OtherPageStack = () => {
@@ -17,4 +18,4 @@ const OtherPageStack = () => {
     </Stack.Navigator>
   );
 };
-export {Home,About,Blogs,Course,Contacts,OtherPageStack,SignUp,Login};
+export {Home,About,Blogs,Course,Contacts,OtherPageStack,SignUp,Login,MyCourses};

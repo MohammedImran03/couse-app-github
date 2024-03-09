@@ -7,12 +7,13 @@ import {
   MaterialIcons,
   FontAwesome,
   FontAwesome5,
-  Entypo
+  Entypo,
+  SimpleLineIcons
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
-import { Home,About,Blogs,Course,Contacts,SignUp,Login  } from "../Route";
+import { Home,About,Blogs,Course,Contacts,SignUp,Login,MyCourses } from "../Route";
 
 const Header = ({ userData, removeUserData }) => {
 
@@ -32,26 +33,45 @@ const Header = ({ userData, removeUserData }) => {
               <SafeAreaView>
                 <View
                   style={{
-                    height: 150,
+                    height: 120,
                     width: '100%',
                     justifyContent: "center",
                     alignItems: "center",
                     borderBottomColor: "#f4f4f4",
-                    borderBottomWidth: 1
+                    borderBottomWidth: 2
                   }}
                 >
                  <FontAwesome5 name="user-alt" size={35} color="white" />
                   <Text
                     style={{
                       fontSize: 20,
-                      marginVertical: 6,
+                      marginVertical: 5,
                       fontWeight: "bold",
                       color: "white"
                     }}
-                  >{userData ? `${userData.email}` : 'Welcome!'}</Text>
-                  <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity>
+                  >{userData ? `${userData.name}` : 'Welcome!'}</Text>
+                  {/* <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity> */}
                 </View>
                 <DrawerItemList {...props} />
+                {userData &&
+                <View style={{marginTop:5,borderTopWidth:2, borderBlockColor:"#fff",alignItems:'center'}}>
+                <TouchableOpacity onPress={handleLogout} style={{ padding: 10,flexDirection:'row', alignItems:'center' }}>
+                <SimpleLineIcons name="logout" size={20} color="white" style={{marginRight:10}} /><Text style={{ color: 'white', marginVertical:4, fontSize:16,fontWeight:'bold'}}>Logout </Text>
+                </TouchableOpacity>
+                </View>}
+              {!userData &&
+                <Drawer.Screen
+                  name="Join Now"
+                  options={{
+                    drawerLabel: 'SignUp / Log In',
+                    title: 'Join Now',
+                    drawerIcon: () => (
+                      <Entypo name="login" size={25} color="#808080" />
+                    ),
+                  }}
+                  component={Login}
+                />
+              }
               </SafeAreaView>
             )
           }
@@ -135,6 +155,17 @@ const Header = ({ userData, removeUserData }) => {
           }}
           component={Course}
         />
+        {userData &&    <Drawer.Screen
+          name="MyCourses"
+          options={{
+            drawerLabel: "My Courses",
+            title: "MyCourses",
+            drawerIcon: () => (
+              <FontAwesome name="list" size={25} color="#808080" />
+            )
+          }}
+          component={MyCourses}
+        />}
         <Drawer.Screen
           name="Contacts"
           options={{
