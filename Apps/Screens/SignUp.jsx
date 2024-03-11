@@ -6,7 +6,8 @@ import Google from '../App_assests/Google.png';
 import Facebook from '../App_assests/Facebook.png';
 import Twitter from '../App_assests/Twitter.png';
 import { userRegistration } from '../apis/user.api';
-
+import {setUserData} from '../Redux/action';
+import { useDispatch } from 'react-redux';
 
 const SignUp = ({onClose}) => {
   const [loginData, setLoginData] = useState({
@@ -19,7 +20,7 @@ const SignUp = ({onClose}) => {
   const handleInputChange = (fieldName, value) => {
     setLoginData({ ...loginData, [fieldName]: value });
   };
-
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
 
   const handleLoginPress =async() => {
@@ -39,7 +40,7 @@ const SignUp = ({onClose}) => {
     try {
       setLoader(true);
       const result = await userRegistration(loginData);
-      console.log(result);
+      dispatch(setUserData(result.data));
      if(result.success === true){
       setLoader(false);
       Alert.alert('Account Creation Success:', result.message);

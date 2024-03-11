@@ -1,9 +1,12 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Modal,ScrollView} from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import Blogdetails from '../Blogdetails';
+
 const BlogPostArea = () => {
   const posts = [
     {
+      id: 1,
       image: require('../../App_assests/Flute.jpg'),
       date: '29th, Oct, 2018',
       likes: '121 likes',
@@ -14,6 +17,7 @@ const BlogPostArea = () => {
       link: 'blog-single.html',
     },
     {
+      id: 2,
       image: require('../../App_assests/carnival.jpg'),
       date: '29th, Oct, 2018',
       likes: '121 likes',
@@ -24,6 +28,7 @@ const BlogPostArea = () => {
       link: 'blog-single1.html',
     },
     {
+      id: 2,
       image: require('../../App_assests/concert.jpg'),
       date: '29th, Oct, 2018',
       likes: '121 likes',
@@ -35,7 +40,15 @@ const BlogPostArea = () => {
     },
   ];
 
-  return (
+  const [selectedBlogId, setSelectedBlogId] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleBlogPress = (blogId) => {
+    setSelectedBlogId(blogId);
+    setModalVisible(true);
+  };
+
+  return (<>
     <View style={styles.container}>
       <View style={styles.sectionTitle}>
         <Text style={styles.titleText}>
@@ -62,7 +75,7 @@ const BlogPostArea = () => {
                 <Text style={styles.postDescription}>{post.description}</Text>
                 <TouchableOpacity
                   style={styles.viewDetailsButton}
-                  onPress={() => console.log('View Details: ' + post.link)}>
+                  onPress={() => handleBlogPress(post.id)} >
                   <View style={styles.viewDetailsButtonText}><Text style={styles.testtext}>View Details</Text><View><Feather name="arrow-right-circle" size={24} color="white" /></View></View>
                 </TouchableOpacity>
               </View>
@@ -71,7 +84,24 @@ const BlogPostArea = () => {
         // </TouchableOpacity>
       ))}
     </View>
-  );
+    <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setSelectedBlogId(null);
+        }}
+      >
+        <ScrollView>
+        {selectedBlogId && (
+          <View>
+            <Blogdetails blogId={selectedBlogId} onClose={() => setModalVisible(false)} />
+          </View>
+        )}
+        </ScrollView>
+      </Modal>
+  </>);
 };
 
 const styles = StyleSheet.create({

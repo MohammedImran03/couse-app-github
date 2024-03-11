@@ -16,16 +16,14 @@ import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer"
 import { Home,About,Blogs,Course,Contacts,SignUp,Login,MyCourses } from "../Route";
 
 const Header = ({ userData, removeUserData }) => {
-
+  const isAdmin = userData && userData.email === 'admin@gmail.com';
   const handleLogout = () => {
     removeUserData();
   };
-
-
   const Drawer = createDrawerNavigator();
   return (
-    
-    <NavigationContainer>
+  
+  <NavigationContainer>
       <Drawer.Navigator
         drawerContent={
           (props) => {
@@ -193,7 +191,11 @@ const Header = ({ userData, removeUserData }) => {
            {/* {userData &&   <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity>     
         } */}
       </Drawer.Navigator>
+
+
+
     </NavigationContainer>
+    
   );
 }
 
