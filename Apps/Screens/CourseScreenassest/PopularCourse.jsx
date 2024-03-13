@@ -4,7 +4,7 @@ import { FontAwesome,Foundation } from '@expo/vector-icons';
 const courseData = [
   {
     id: 1,
-    image: require('../../App_assests/bh3.jpg'),
+    image: require('../../App_assests/p1.jpg'),
     name: 'Learn Angular JS Course for Legendary Persons',
     category: 'programming language',
     price: '$150',
@@ -13,7 +13,7 @@ const courseData = [
   },
   {
     id: 2,
-    image: require('../../App_assests/bh3.jpg'),
+    image: require('../../App_assests/p2.jpg'),
     name: 'Python programming language',
     category: 'Python programming language',
     price: '$150',
@@ -22,7 +22,7 @@ const courseData = [
   },
   {
     id: 3,
-    image: require('../../App_assests/bh3.jpg'),
+    image: require('../../App_assests/p3.jpg'),
     name: 'Learn Angular JS Course for Legendary Persons',
     category: 'programming language',
     price: '$150',
@@ -31,7 +31,7 @@ const courseData = [
   },
   {
     id: 4,
-    image: require('../../App_assests/bh3.jpg'),
+    image: require('../../App_assests/p4.jpg'),
     name: 'Learn Angular JS Course for Legendary Persons',
     category: 'programming language',
     price: '$150',
@@ -145,13 +145,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor:'gray',
     borderRadius: 4,
-    paddingVertical:5,
+    // paddingVertical:5,
     height:350,
   },
   courseImage: {
-    width: 320,
+    width: "100%",
     height: 200,
-    borderRadius: 8,
+    // borderRadius: 8,
+    borderTopLeftRadius:4,
+    borderTopRightRadius:4
   },
   details: {
     marginTop: 10,
@@ -181,7 +183,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     marginTop: 5,
     flexDirection:'row',
-    // alignItems:'flex-start',
+    alignItems:'center',
     marginBottom:10,
     justifyContent:'center',
     textAlign:'center',
@@ -197,7 +199,6 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: 'row',
     marginTop: 5,
-    
   },
   starIcon: {
     color: 'orange',

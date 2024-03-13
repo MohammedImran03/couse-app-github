@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blueviolet', // Set background color accordingly
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginVertical:10,
+    // marginVertical:10,
   },
   row: {
     flexDirection: 'column',

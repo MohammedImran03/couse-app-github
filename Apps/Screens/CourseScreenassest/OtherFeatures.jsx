@@ -48,7 +48,7 @@ const OtherFeatureSection = () => {
         </Text>
       </View>
       <View style={styles.featureInner}>
-        {featuresData.map((feature, index) => (
+        {featuresData.map((feature, index)=>(
           <View key={index} style={styles.featureItem}>
             <Text style={styles.featureIcon}>{feature.icon}</Text>
             <Text style={styles.featureTitle}>{feature.title}</Text>

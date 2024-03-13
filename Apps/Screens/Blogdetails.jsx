@@ -7,7 +7,7 @@ const BlogDetails = ({ blogId, onClose }) => {
   const blogPost = BlogsData.find((blog) => blog.id === blogId);
 
   if (!blogPost) {
-    // You can show an error message or handle the case when blog is not found
+  
     return <Text>Blog not found</Text>;
   }
 

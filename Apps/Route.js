@@ -8,8 +8,9 @@ import OtherPage from "./Screens/otherpage";
 import SignUp from "./Screens/SignUp";
 import Login from "./Screens/Login";
 import MyCourses from "./Screens/MyCourses";
-const Stack = createStackNavigator();
+import CourseEnrollments from './Screens/Admin/CourseEnrollments';
 
+const Stack = createStackNavigator();
 const OtherPageStack = () => {
   return (
     <Stack.Navigator>
@@ -18,4 +19,4 @@ const OtherPageStack = () => {
     </Stack.Navigator>
   );
 };
-export {Home,About,Blogs,Course,Contacts,OtherPageStack,SignUp,Login,MyCourses};
+export {Home,About,Blogs,Course,Contacts,OtherPageStack,SignUp,Login,MyCourses,CourseEnrollments};
