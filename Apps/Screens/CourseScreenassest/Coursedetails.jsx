@@ -1,19 +1,82 @@
-import { View, Text,TouchableOpacity,StyleSheet } from 'react-native'
+import { View, Text,TouchableOpacity,StyleSheet,Image,Alert} from 'react-native'
 import React from 'react'
 import {FontAwesome  } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import RazorpayCheckout from 'react-native-razorpay';
 
 
-export default function Coursedetails({ blogId, onClose, CourseData}) {
-
-    const coursepost = CourseData.find((blog) => blog._id === blogId);
-
+const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
+  const coursepost = CourseData.find((blog) => blog._id === blogId);
     if (!coursepost) {
-   
         return <Text>Blog not found</Text>;
       }
 
+const Course_Enrollment=async()=>{
+  if(userData && userData._id){
+    const enrollmentData = {
+      user_id: userData._id,
+      payment_id: '',
+      amount: coursepost.c_fee,
+      product_id: coursepost._id,
+    };    
+  // console.log('Enrollment Data:', enrollmentData);
+  // const options={
+  //   description: 'Credits towards consultation',
+  //   image: require('./check.jpg'),
+  //   currency: 'INR',
+  //   key: 'rzp_test_1ITMBhQFXyD7lk',
+  //   amount: 5000,
+  //   name: 'Acme Corp',
+  //   order_id: '',
+  //   prefill: {
+  //     email: userData.email,
+  //     contact: userData.ph_no,
+  //     name: userData.name
+  //   },
+  //   theme: { color: '#53a20e' }
+  // };
+  // console.log(options)
+  // RazorpayCheckout.open(options)
+  //   .then((data) => {
+  //     Alert.alert(`Success: ${data.razorpay_payment_id}`);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     Alert.alert(`Error: ${error.code}`, error.description);
+  //   });
+
+  var options = {
+    description: 'Credits towards consultation',
+    image: 'https://i.imgur.com/3g7nmJC.png',
+    currency: 'INR',
+    key: 'rzp_test_1ITMBhQFXyD7lk', 
+    amount: '5000',
+    name: 'foo',
+    prefill: {
+      email: 'void@razorpay.com',
+      contact: '9191919191',
+      name: 'Razorpay Software'
+    },
+    theme: {color: '#F37254'}
+  }
+  RazorpayCheckout.open(options).then((data) => {
+    // handle success
+    alert(`Success: ${data.razorpay_payment_id}`);
+  }).catch((error) => {
+    // handle failure
+    alert(`Error: ${error.code} | ${error.description}`);
+  });
+ }
+//  else{
+  //   Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
+  //   return;
+  // }
+   }
+
+
+
   return (
-    <View style={{backgroundColor:'rgb(192,192,192)',padding:10,}}>
+    <View style={{padding:5, paddingBottom:30,}}>
         <View style={{marginVertical:5, marginHorizontal:2,flex:1,alignItems:'flex-start'}}>
     <TouchableOpacity onPress={onClose} style={{backgroundColor:'rgb(0,191,255)',borderRadius:5,padding:4,  flexDirection:'row',alignItems:'flex-start',paddingHorizontal:5,marginBottom:5}}>
       <Text><FontAwesome name="long-arrow-left" size={25} color="blueviolet" /></Text>
@@ -23,21 +86,47 @@ export default function Coursedetails({ blogId, onClose, CourseData}) {
   <View>
   <Text style={{fontSize:24,fontWeight:'bold',color:'blueviolet',}}>{coursepost.c_title}</Text>
 <View>
+  <View style={{flexDirection:'row',justifyContent:'space-between'}}>
   <View style={styles.Descriptions}>
     <Text style={styles.option}>Trainer : </Text>
-    <Text style={styles.option}>{coursepost.t_name}</Text>
+    <Text style={styles.option3}>{coursepost.t_name}</Text>
   </View>
+  {/* <Text>{coursepost._id}</Text> */}
   <View style={styles.Descriptions}>
     <Text style={styles.option}>Instrument : </Text>
-    <Text style={styles.option}>{coursepost.instrument}</Text>
+    <Text style={styles.option3}>{coursepost.instrument}</Text>
   </View>
-  <View style={styles.Descriptions}>
+  </View>
+ 
+  <View style={{flexWrap: 'wrap', padding:4,flexDirection:'row',justifyContent:'space-between' , backgroundColor:"rgb(230,230,250)",borderRadius:5,}}>
+  <Text style={styles.option5}>{coursepost.c_outline}</Text>
+  <Image source={{ uri: coursepost.image_link }} style={styles.image} />
+  <Text style={styles.option5}>{coursepost.objective}.</Text>
+  </View>
+  <View>
+  
+  </View>
+  <View style={styles.Descriptions1}>
     <Text style={styles.option1}>Eligibility : </Text>
     <Text style={styles.option2}>{coursepost.eligibility}</Text>
   </View>
+  
+  <View style={styles.Descriptions}>
+    <Text style={styles.option}>Last Update : </Text>
+    <Text style={styles.option3}>{coursepost.last_update}</Text>
+  </View>
+  <View style={styles.Descriptions}>
+    <Text style={styles.option4}>Price : </Text>
+    <Text style={styles.option4}><Text>Rs.</Text> {coursepost.c_fee}</Text>
+  </View>
+  <View style={{marginTop:10,flex:1,alignItems:'center'}}>
+    <TouchableOpacity onPress={Course_Enrollment} style={{backgroundColor:'blueviolet',borderRadius:5,padding:4, flexDirection:'row',paddingHorizontal:5,marginBottom:5}}>
+      {/* <Text><MaterialIcons name="arrow-back-ios-new" size={25} color="blueviolet" /></Text> */}
+      <Text style={{fontSize:20,fontWeight:'bold', marginLeft:5,color:'white'}}>Enroll Course Rs.{coursepost.c_fee}</Text>
+    </TouchableOpacity>
+  </View>
 </View>
   </View>
-     
     </View>
   )
 }
@@ -45,16 +134,54 @@ export default function Coursedetails({ blogId, onClose, CourseData}) {
 const styles=StyleSheet.create({
   Descriptions:{ flexWrap: 'wrap',paddingHorizontal:10, flexDirection:'row',justifyContent:'space-between' , backgroundColor:"rgb(230,230,250)",borderRadius:5,padding:4,alignItems:'flex-start',marginVertical:3},
 option:{
-  fontSize:18,
+  fontSize:14,
   fontWeight:'bold',
+  color:'rgb(102, 102, 102)'
 },
+Descriptions1:{ flexWrap: 'wrap',paddingHorizontal:10, flexDirection:'column', backgroundColor:"rgb(230,230,250)",borderRadius:5,padding:4,alignItems:'flex-start',marginVertical:3},
 option1:{
-  fontSize:18,
+  fontSize:14,
   fontWeight:'bold',
+  color:'rgb(102, 102, 102)'
 },
 option2:{
+  fontSize:14,
+  fontWeight:'bold',
+textAlign:'justify',
+color:'rgb(102, 102, 102)'
+},
+option5:{
+  fontSize:14,
+  fontWeight:'bold',
+textAlign:'left',
+color:'rgb(102, 102, 102)'
+},
+option3:{
+  fontSize:14,
+  fontWeight:'bold',
+  color:'blueviolet',
+  color:'rgb(102, 102, 102)'
+},
+option4:{
   fontSize:18,
   fontWeight:'bold',
-}
+  color:'green',
+  // color:'rgb(102, 102, 102)'
+},
+image: {
+  borderRadius:5,
+  marginVertical:5,
+  // alignItems:'center',
+  width: "100%",
+  height: 200,
+  // borderTopLeftRadius: 10,
+  // borderBottomLeftRadius: 10,
+},
 
 });
+
+const mapStateToProps = (state) => ({
+  userData: state.userData,
+});
+
+export default connect(mapStateToProps)(Coursedetails);

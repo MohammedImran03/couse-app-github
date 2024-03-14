@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/App_Logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.reactapp"
     },
     "web": {
       "favicon": "./assets/App_Logo.png"
