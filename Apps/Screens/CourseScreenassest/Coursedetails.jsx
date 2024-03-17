@@ -14,7 +14,7 @@ const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
       }
 
 
-const {initPaymentSheet,presentPaymentSheet}=useStripe();      
+      const { initPaymentSheet, presentPaymentSheet } = useStripe();   
 const Course_Enrollment=async()=>{
 //   if(userData && userData._id){
 //     const enrollmentData = {
@@ -28,46 +28,58 @@ const Course_Enrollment=async()=>{
 //     Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
 //     return;
 //   }
-const value={
-  amount:790,
-}
-try{
-  const response=await UserPayment(value);
-  console.log(response.data.paymentIntent);
-  if(response.error){
+const value = {
+  amount: parseInt(coursepost.c_fee),
+};
+
+try {
+  const response = await UserPayment(value);
+  const client_secret = response.data.paymentIntent;
+  console.log(client_secret);
+  
+  if (response.error) {
     Alert.alert('Payment Error : ', response.error);
-        return;
+    return;
   }
-  // 2. Initialize the Payment sheet
+  
+  // Initialize the Payment sheet
   const initResponse = await initPaymentSheet({
-    merchantDisplayName: 'notJust.dev',
-    paymentIntentClientSecret: response.data.paymentIntent,
+    merchantDisplayName: 'Not Disclosed',
+    paymentIntentClientSecret: client_secret,
+    allowsDelayedPaymentMethods: true,
+    defaultBillingDetails: {
+      name: 'Jane Doe',
+    } 
   });
+  
   if (initResponse.error) {
     console.log(initResponse.error);
     Alert.alert('Something went wrong');
     return;
   }
 
-  // 3. Present the Payment Sheet from Stripe
+  // Present the Payment Sheet from Stripe
   const paymentResponse = await presentPaymentSheet();
+  console.log(paymentResponse);
   if (paymentResponse.error) {
+    console.log(paymentResponse.error);
     Alert.alert(
       `Payment Error: ${paymentResponse.error.code}`,
       paymentResponse.error.message
     );
     return;
   }
-
-  // 4. If payment ok -> create the order
+  
+  // If payment is done, create the order
   // onCreateOrder();
-}catch(error){
-  Alert.alert('Payment Error : ', error);
-      return;
-  // console.log(error);
+} catch (error) {
+  if (error.response && error.response.data) {
+    Alert.alert('Payment Error : ', error.response.data);
+  } else {
+    Alert.alert('Payment Error : ', error.message);
+  }
+  return;
 }
-
-
 
    }
 

@@ -1,29 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { removeUserData } from '../Redux/action';
-import "react-native-gesture-handler";
-import { View, Text, TouchableOpacity ,Picker} from "react-native";
-import {
-  MaterialIcons,
-  FontAwesome,
-  FontAwesome5,
-  Entypo,
-  SimpleLineIcons
-} from "@expo/vector-icons";
+import { View, Text, TouchableOpacity } from "react-native";
+import { FontAwesome5,FontAwesome, Entypo, SimpleLineIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
-import { CourseEnrollments,SignUp,Login,MyCourses } from "../Route";
+import {Login } from "../Route";
+import { Picker } from '@react-native-picker/picker';
+import Dashboard from '../Admin/Dashboard';
+import Add_Course from '../Admin/Add_Course';
+import Add_Videos from '../Admin/Add_Videos';
+import All_Courses from '../Admin/All_Courses';
+import CourseEnrollments from '../Admin/CourseEnrollment';
+import CourseCounselling from '../Admin/CourseCounselling';
+
 
 const CustomHeader = ({ userData, removeUserData }) => {
-  
+
   const handleLogout = () => {
     removeUserData();
   };
+
+  const [selectedScreen, setSelectedScreen] = useState('Dashboard');
+
   const Drawer = createDrawerNavigator();
+
+  const coursesScreens = [
+    { label: 'Dashboard', value: 'Dashboard' },
+    { label: 'Add Course', value: 'Add_Course' },
+  ];
+
   return (
-  
-  <NavigationContainer>
+    <NavigationContainer>
       <Drawer.Navigator
         drawerContent={
           (props) => {
@@ -39,7 +48,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
                     borderBottomWidth: 2
                   }}
                 >
-                 <FontAwesome5 name="user-alt" size={35} color="white" />
+                  <FontAwesome5 name="user-alt" size={35} color="white" />
                   <Text
                     style={{
                       fontSize: 20,
@@ -48,68 +57,121 @@ const CustomHeader = ({ userData, removeUserData }) => {
                       color: "white"
                     }}
                   >{userData ? `${userData.name}` : 'Welcome!'}</Text>
-                  {/* <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity> */}
                 </View>
                 <DrawerItemList {...props} />
+                {/* <View style={{ backgroundColor: "rgb(119,136,153)" }}>
+                  <Picker
+                    selectedValue={selectedScreen}
+                    style={{ color: 'white', backgroundColor: "rgb(119,136,153)" }}
+                    onValueChange={(itemValue) => {
+                      setSelectedScreen(itemValue);
+                      props.navigation.navigate(itemValue);
+                    }}
+                  >
+                    {coursesScreens.map((screen, index) => (
+                      <Picker.Item key={index} label={screen.label} value={screen.value} />
+                    ))}
+                  </Picker>
+                </View> */}
                 {userData &&
-                <View style={{marginTop:5,borderTopWidth:2, borderBlockColor:"#fff",alignItems:'center'}}>
-                <TouchableOpacity onPress={handleLogout} style={{ padding: 10,flexDirection:'row', alignItems:'center' }}>
-                <SimpleLineIcons name="logout" size={20} color="white" style={{marginRight:10}} /><Text style={{ color: 'white', marginVertical:4, fontSize:16,fontWeight:'bold'}}>Logout </Text>
-                </TouchableOpacity>
-                </View>}
-              {!userData &&
-                <Drawer.Screen
-                  name="Join Now"
-                  options={{
-                    drawerLabel: 'SignUp / Log In',
-                    title: 'Join Now',
-                    drawerIcon: () => (
-                      <Entypo name="login" size={25} color="#808080" />
-                    ),
-                  }}
-                  component={Login}
-                />
-              }
+                  <View style={{ marginTop: 5, borderTopWidth: 2, borderBlockColor: "#fff", alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleLogout} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+                      <SimpleLineIcons name="logout" size={20} color="white" style={{ marginRight: 10 }} />
+                      <Text style={{ color: 'white', marginVertical: 4, fontSize: 16, fontWeight: 'bold' }}>Logout </Text>
+                    </TouchableOpacity>
+                  </View>}
+                {!userData &&
+                  <Drawer.Screen
+                    name="Join Now"
+                    options={{
+                      drawerLabel: 'SignUp / Log In',
+                      title: 'Join Now',
+                      drawerIcon: () => (
+                        <Entypo name="login" size={25} color="#808080" />
+                      ),
+                    }}
+                    component={Login}
+                  />
+                }
               </SafeAreaView>
             )
           }
         }
         screenOptions={{
           drawerStyle: {
-            backgroundColor: "blueviolet",
+            backgroundColor: "rgb(119,136,153)",
             width: 230
           },
-          CustomHeaderStyle: {
-            height:50,
-            backgroundColor: "blueviolet",
+          headerStyle: {
+            height: 50,
+            backgroundColor: "rgb(119,136,153)",
           },
-          CustomHeaderTintColor: "#fff",
-          CustomHeaderTitleStyle: {
+          headerTintColor: "#fff",
+          headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 18,
           },
           drawerLabelStyle: {
             color: "white"
-          },
-
-          CustomHeaderRight: () => (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', 
-            marginRight:15,
-            }}>
-            {/* <TouchableOpacity
-            > */}
-             <Text style={{
-                 fontWeight: "bold",
-                 fontSize: 16,
-                 color:'white', 
-                fontStyle:'italic',
-             }}>Admin</Text>
-            {/* </TouchableOpacity> */}
-          </View>
-          ),
+          }
         }}
       >
         <Drawer.Screen
+          name="Dashboard"
+          options={{
+            drawerLabel: "Dash Board",
+            title: "Dashboard",
+            drawerIcon: () => (
+              <FontAwesome name="home" size={25} color="#808080" />
+            )
+          }}
+          component={Dashboard}
+        />
+           <Drawer.Screen
+          name="Add Course"
+          options={{
+            drawerLabel: "Add Course",
+            title: "Add new Course",
+            drawerIcon: () => (
+              <FontAwesome name="home" size={25} color="#808080" />
+            )
+          }}
+          component={Add_Course}
+        />
+        <Drawer.Screen
+          name="Add Videos"
+          options={{
+            drawerLabel: "Add Videos",
+            title: "Add Course Video",
+            drawerIcon: () => (
+              <FontAwesome name="home" size={25} color="#808080" />
+            )
+          }}
+          component={Add_Videos}
+        />
+         <Drawer.Screen
+          name="All Courses"
+          options={{
+            drawerLabel: "All Courses",
+            title: "All Courses",
+            drawerIcon: () => (
+              <FontAwesome name="home" size={25} color="#808080" />
+            )
+          }}
+          component={All_Courses}
+        />
+              <Drawer.Screen
+          name="CourseCounselling"
+          options={{
+            drawerLabel: "Counselling",
+            title: "CourseCounselling",
+            drawerIcon: () => (
+              <FontAwesome name="home" size={25} color="#808080" />
+            )
+          }}
+          component={CourseCounselling}
+        />
+         <Drawer.Screen
           name="CourseEnrollments"
           options={{
             drawerLabel: "CourseEnrollments",
@@ -120,82 +182,8 @@ const CustomHeader = ({ userData, removeUserData }) => {
           }}
           component={CourseEnrollments}
         />
-          {/* <Drawer.Screen
-          name="About"
-          options={{
-            drawerLabel: "About",
-            title: "About Us",
-            drawerIcon: () => (
-              <MaterialIcons name="details" size={25} color="#808080" />
-            )
-          }}
-          component={About}
-        /> */}
-        {/* <Drawer.Screen
-          name="Blogs"
-          options={{
-            drawerLabel: "Blogs",
-            title: "Blogs",
-            drawerIcon: () => (
-              <FontAwesome5 name="blogger-b" size={25} color="#808080" />
-            )
-          }}
-          component={Blogs}
-        /> */}
-        {/* <Drawer.Screen
-          name="Course"
-          options={{
-            drawerLabel: "Course",
-            title: "Course",
-            drawerIcon: () => (
-              <MaterialIcons name="dashboard-customize" size={25} color="#808080" />
-            )
-          }}
-          component={Course}
-        /> */}
-        {userData &&    <Drawer.Screen
-          name="MyCourses"
-          options={{
-            drawerLabel: "My Courses",
-            title: "MyCourses",
-            drawerIcon: () => (
-              <FontAwesome name="list" size={25} color="#808080" />
-            )
-          }}
-          component={MyCourses}
-        />}
-        {/* <Drawer.Screen
-          name="Contacts"
-          options={{
-            drawerLabel: "Contact",
-            title: "Contact",
-            drawerIcon: () => (
-              <MaterialIcons name="contacts" size={25} color="#808080" />
-            )
-          }}
-          component={Contacts}
-        />  */}
-        {!userData && 
-        <Drawer.Screen
-          name="Join Now"
-          options={{
-            drawerLabel: "SignUp / Log In",
-            title: "Join Now",
-            drawerIcon: () => (
-              <Entypo name="login" size={25} color="#808080" />
-            )
-          }}
-          component={Login}
-        /> 
-           }
-           {/* {userData &&   <TouchableOpacity onPress={handleLogout}><Text>LOg out</Text></TouchableOpacity>     
-        } */}
       </Drawer.Navigator>
-
-
-
     </NavigationContainer>
-    
   );
 }
 
@@ -208,8 +196,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomHeader);
-
-
-
-
-
