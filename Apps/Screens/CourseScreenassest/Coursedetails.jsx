@@ -2,7 +2,9 @@ import { View, Text,TouchableOpacity,StyleSheet,Image,Alert} from 'react-native'
 import React from 'react'
 import {FontAwesome  } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import RazorpayCheckout from 'react-native-razorpay';
+import {UserPayment} from '../../apis/payment.api';
+import { useStripe } from '@stripe/stripe-react-native';
+
 
 
 const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
@@ -11,66 +13,62 @@ const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
         return <Text>Blog not found</Text>;
       }
 
-const Course_Enrollment=async()=>{
-  if(userData && userData._id){
-    const enrollmentData = {
-      user_id: userData._id,
-      payment_id: '',
-      amount: coursepost.c_fee,
-      product_id: coursepost._id,
-    };    
-  // console.log('Enrollment Data:', enrollmentData);
-  // const options={
-  //   description: 'Credits towards consultation',
-  //   image: require('./check.jpg'),
-  //   currency: 'INR',
-  //   key: 'rzp_test_1ITMBhQFXyD7lk',
-  //   amount: 5000,
-  //   name: 'Acme Corp',
-  //   order_id: '',
-  //   prefill: {
-  //     email: userData.email,
-  //     contact: userData.ph_no,
-  //     name: userData.name
-  //   },
-  //   theme: { color: '#53a20e' }
-  // };
-  // console.log(options)
-  // RazorpayCheckout.open(options)
-  //   .then((data) => {
-  //     Alert.alert(`Success: ${data.razorpay_payment_id}`);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     Alert.alert(`Error: ${error.code}`, error.description);
-  //   });
 
-  var options = {
-    description: 'Credits towards consultation',
-    image: 'https://i.imgur.com/3g7nmJC.png',
-    currency: 'INR',
-    key: 'rzp_test_1ITMBhQFXyD7lk', 
-    amount: '5000',
-    name: 'foo',
-    prefill: {
-      email: 'void@razorpay.com',
-      contact: '9191919191',
-      name: 'Razorpay Software'
-    },
-    theme: {color: '#F37254'}
-  }
-  RazorpayCheckout.open(options).then((data) => {
-    // handle success
-    alert(`Success: ${data.razorpay_payment_id}`);
-  }).catch((error) => {
-    // handle failure
-    alert(`Error: ${error.code} | ${error.description}`);
-  });
- }
+const {initPaymentSheet,presentPaymentSheet}=useStripe();      
+const Course_Enrollment=async()=>{
+//   if(userData && userData._id){
+//     const enrollmentData = {
+//       user_id: userData._id,
+//       payment_id: '',
+//       amount: coursepost.c_fee,
+//       product_id: coursepost._id,
+//     };    
+//   }
 //  else{
-  //   Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
-  //   return;
-  // }
+//     Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
+//     return;
+//   }
+const value={
+  amount:790,
+}
+try{
+  const response=await UserPayment(value);
+  console.log(response.data.paymentIntent);
+  if(response.error){
+    Alert.alert('Payment Error : ', response.error);
+        return;
+  }
+  // 2. Initialize the Payment sheet
+  const initResponse = await initPaymentSheet({
+    merchantDisplayName: 'notJust.dev',
+    paymentIntentClientSecret: response.data.paymentIntent,
+  });
+  if (initResponse.error) {
+    console.log(initResponse.error);
+    Alert.alert('Something went wrong');
+    return;
+  }
+
+  // 3. Present the Payment Sheet from Stripe
+  const paymentResponse = await presentPaymentSheet();
+  if (paymentResponse.error) {
+    Alert.alert(
+      `Payment Error: ${paymentResponse.error.code}`,
+      paymentResponse.error.message
+    );
+    return;
+  }
+
+  // 4. If payment ok -> create the order
+  // onCreateOrder();
+}catch(error){
+  Alert.alert('Payment Error : ', error);
+      return;
+  // console.log(error);
+}
+
+
+
    }
 
 
