@@ -4,7 +4,7 @@ import {FontAwesome  } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import {UserPayment} from '../../apis/payment.api';
 import { useStripe } from '@stripe/stripe-react-native';
-
+import {createnewCourse} from '../../apis/course.api';
 
 
 const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
@@ -16,62 +16,69 @@ const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
 
       const { initPaymentSheet, presentPaymentSheet } = useStripe();   
 const Course_Enrollment=async()=>{
-//   if(userData && userData._id){
-//     const enrollmentData = {
-//       user_id: userData._id,
-//       payment_id: '',
-//       amount: coursepost.c_fee,
-//       product_id: coursepost._id,
-//     };    
-//   }
-//  else{
-//     Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
-//     return;
-//   }
-const value = {
-  amount: parseInt(coursepost.c_fee),
-};
+  if(userData && userData._id){
 
 try {
+  const value = {
+    amount: parseInt(coursepost.c_fee),
+  };
   const response = await UserPayment(value);
   const client_secret = response.data.paymentIntent;
   console.log(client_secret);
   
-  if (response.error) {
-    Alert.alert('Payment Error : ', response.error);
-    return;
-  }
+  // if (response.error) {
+  //   Alert.alert('Payment Error : ', response.error);
+  //   return;
+  // }
   
-  // Initialize the Payment sheet
-  const initResponse = await initPaymentSheet({
-    merchantDisplayName: 'Not Disclosed',
-    paymentIntentClientSecret: client_secret,
-    allowsDelayedPaymentMethods: true,
-    defaultBillingDetails: {
-      name: 'Jane Doe',
-    } 
-  });
-  
-  if (initResponse.error) {
-    console.log(initResponse.error);
-    Alert.alert('Something went wrong');
-    return;
-  }
+  // // Initialize the Payment sheet
+  // const initResponse = await initPaymentSheet({
+  //   merchantDisplayName: 'Not Disclosed',
+  //   paymentIntentClientSecret: client_secret,
+  //   allowsDelayedPaymentMethods: true,
+  //   defaultBillingDetails: {
+  //     name: 'Jane Doe',
+  //   } 
+  // });
+  // console.log("initresponse",initResponse)
+  // console.log(initPaymentSheet)
+  // if (initResponse.error) {
+  //   console.log(initResponse.error);
+  //   Alert.alert('Something went wrong');
+  //   return;
+  // }
 
-  // Present the Payment Sheet from Stripe
-  const paymentResponse = await presentPaymentSheet();
-  console.log(paymentResponse);
-  if (paymentResponse.error) {
-    console.log(paymentResponse.error);
-    Alert.alert(
-      `Payment Error: ${paymentResponse.error.code}`,
-      paymentResponse.error.message
-    );
-    return;
-  }
+  // // Present the Payment Sheet from Stripe
+  // const paymentResponse = await presentPaymentSheet();
+  // console.log(paymentResponse);
+  // if (paymentResponse.error) {
+  //   console.log(paymentResponse.error);
+  //   Alert.alert(
+  //     `Payment Error: ${paymentResponse.error.code}`,
+  //     paymentResponse.error.message
+  //   );
+  //   return;
+  // }
+  // console.log(presentPaymentSheet);
   
   // If payment is done, create the order
-  // onCreateOrder();
+
+  const enrollmentData = {
+    user_id: userData._id,
+    payment_id: client_secret,
+    amount: coursepost.c_fee,
+    product_id: coursepost._id,
+  };    
+  const result = await createnewCourse(enrollmentData);
+ if(result.success === true){
+  Alert.alert('Course Enrollment Success:', result.message);
+  return;
+ }else{
+  Alert.alert('Course Enrollment Satus:', result.response.data.message || result.message);
+  return;
+ }
+
+
 } catch (error) {
   if (error.response && error.response.data) {
     Alert.alert('Payment Error : ', error.response.data);
@@ -80,6 +87,11 @@ try {
   }
   return;
 }
+}
+else{
+   Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
+   return;
+ }
 
    }
 
