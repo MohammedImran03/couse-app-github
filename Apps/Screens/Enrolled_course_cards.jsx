@@ -1,47 +1,65 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import My_Coursedetails from './My_Coursedetails';
+const CourseCard = ({ enrolledCourses }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleBlogPress = (productId) => {
+    const product = enrolledCourses.find((item) => item.id === productId);
+    setSelectedProduct(product);
+    setModalVisible(true);
+  };
 
 
-
-const CourseCard = ({ productData}) => {
+function Onclose(){
+  setModalVisible(false);
+}
   return (
-    {productData.map((course))
     <View style={styles.container}>
-      <Image source={{ uri: productData.image_link }} style={styles.image} />
-      <View style={styles.cardDetails}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3 }}>
-          <Text style={styles.description}>{productData.instrument}</Text>
-          <Text style={styles.description}>By: {productData.t_name}</Text>
-        </View>
-        <Text style={styles.title}>{productData.c_title}</Text>
-        <View style={styles.starRatings}>
-          {/* Add StarRating component */}
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            <Text>
-                {/* <FontAwesome name="rupee" size={20} color="green" /> */}
-                </Text>
-            <Text style={styles.price}>{productData.c_fee}</Text>
+      {enrolledCourses.map((product, index) => (
+        <View key={index} style={styles.card}>
+          <Text style={styles.title}>{product.c_title}</Text>
+          <Image source={{ uri: product.image_link }} style={styles.image} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 2 }}>
+            <Text style={styles.description}>{product.instrument}</Text>
+            <Text style={styles.description}>By: {product.t_name}</Text>
           </View>
-          <TouchableOpacity 
-        //   onPress={() => handleBlogPress(productData._id)}
-           style={styles.viewMoreBtn}>
-            <Text style={styles.buttonText}>View Details</Text>
+          <TouchableOpacity onPress={() => handleBlogPress(product.id)}>
+            <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>View Details</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      ))}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+      <ScrollView>
+<View>
+  <My_Coursedetails product={selectedProduct} onClose={Onclose}/>
+</View>
+      </ScrollView>
+      </Modal>
     </View>
-    }
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'rgb(220, 220, 220)',
+    marginVertical: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+  },
+  card: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 10,
-    margin: 10,
+    padding: 7,
+    marginVertical: 5,
+    marginHorizontal: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -49,9 +67,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 7,
   },
   image: {
     width: '100%',
@@ -60,31 +78,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   description: {
-    fontSize: 16,
-    marginBottom: 10,
+    fontSize: 14,
+    marginBottom: 5,
   },
-  cardDetails: {
-    flex: 1,
-  },
-  starRatings: {
-    // Add styling for star ratings
-  },
-  price: {
-    fontSize: 18,
-    marginLeft: 5,
-  },
-  viewMoreBtn: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+ 
 });
 
 export default CourseCard;
