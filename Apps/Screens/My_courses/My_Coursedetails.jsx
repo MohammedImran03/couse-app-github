@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 export default function My_Coursedetails({product,onClose}) {
 
@@ -8,7 +9,7 @@ export default function My_Coursedetails({product,onClose}) {
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>Close</Text>
+          <Text><Entypo name="cross" size={24} color="blue" /></Text><Text style={styles.closeButtonText}> Close</Text>
         </TouchableOpacity>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={{padding:5, paddingBottom:30,}}>
@@ -104,11 +105,20 @@ const styles=StyleSheet.create({
         marginBottom: 5,
       },
       closeButton: {
+        backgroundColor:'gray',
+        // padding:5,
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
         position: 'absolute',
         top: 10,
         left: 10,
       },
       closeButtonText: {
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'center',
         fontSize: 16,
         color: 'blue',
       },
@@ -125,6 +135,7 @@ const styles=StyleSheet.create({
     color:'rgb(102, 102, 102)'
   },
   option2:{
+    marginBottom:10,
     fontSize:14,
     fontWeight:'bold',
   textAlign:'justify',

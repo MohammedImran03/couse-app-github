@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text,TouchableOpacity,ScrollView } from 'react-native';
 import { getusersAllNotes } from '../apis/course.api';
 import axios from 'axios';
-import CourseCard from './Enrolled_course_cards';
+import CourseCard from '../Screens/My_courses/Enrolled_course_cards';
 import { Ionicons } from '@expo/vector-icons';
 
 const MyCourses = ({ userData }) => {
