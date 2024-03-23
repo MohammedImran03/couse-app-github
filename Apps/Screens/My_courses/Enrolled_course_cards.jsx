@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Modal, Tou
 import My_Coursedetails from './My_Coursedetails';
 import My_course_Videos from './My_course_Videos';
 // import axios from 'axios';
+// import { Video } from 'expo-av';
 
 const CourseCard = ({ enrolledCourses }) => {
 
@@ -68,7 +69,13 @@ const CourseCard = ({ enrolledCourses }) => {
           </View>
         </View>
       ))}
-
+{/* <View><Text>https://res.cloudinary.com/dplltb3db/video/upload/v1711027548/amknn7ie3riizmnjnzkq.mp4</Text>
+<Video
+            source={{ uri: 'https://res.cloudinary.com/dplltb3db/video/upload/v1711027548/amknn7ie3riizmnjnzkq.mp4' }}
+            style={styles.video}
+            useNativeControls // This enables native playback controls
+          />
+</View> */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -131,6 +138,10 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     marginBottom: 5,
+  },
+  video: {
+    width: '100%',
+    height: 300,
   },
 });
 
