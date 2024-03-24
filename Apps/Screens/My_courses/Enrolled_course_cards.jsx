@@ -61,10 +61,10 @@ const CourseCard = ({ enrolledCourses }) => {
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => handleBlogPress(product._id)}>
-              <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>View Details</Text>
+              <Text style={{fontSize:14,fontWeight:'bold', color: 'white',backgroundColor:'blueviolet',paddingHorizontal:8,paddingVertical:5,borderRadius:10, }}>View Details</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleBlogPress2(product._id)}>
-              <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>View Classes</Text>
+              <Text style={{fontSize:14,fontWeight:'bold', color: 'white',backgroundColor:'blueviolet',paddingHorizontal:8,paddingVertical:5,borderRadius:10, }} >View Classes</Text>
             </TouchableOpacity>
           </View>
         </View>

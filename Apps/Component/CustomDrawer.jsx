@@ -87,7 +87,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
                       drawerLabel: 'SignUp / Log In',
                       title: 'Join Now',
                       drawerIcon: () => (
-                        <Entypo name="login" size={25} color="#808080" />
+                        <Entypo name="login" size={25} color="black" />
                       ),
                     }}
                     component={Login}
@@ -122,7 +122,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Dash Board",
             title: "Dashboard",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <FontAwesome name="home" size={25} color="black" />
             )
           }}
           component={Dashboard}
@@ -133,7 +133,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Add Course",
             title: "Add new Course",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <Entypo name="add-to-list" size={25} color="black" />
             )
           }}
           component={Add_Course}
@@ -144,7 +144,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Add Videos",
             title: "Add Course Video",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <FontAwesome name="home" size={25} color="black" />
             )
           }}
           component={Add_Videos}
@@ -155,7 +155,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "All Courses",
             title: "All Courses",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <FontAwesome name="home" size={25} color="black" />
             )
           }}
           component={All_Courses}
@@ -166,7 +166,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Counselling",
             title: "CourseCounselling",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <FontAwesome name="home" size={25} color="black" />
             )
           }}
           component={CourseCounselling}
@@ -174,10 +174,10 @@ const CustomHeader = ({ userData, removeUserData }) => {
          <Drawer.Screen
           name="CourseEnrollments"
           options={{
-            drawerLabel: "CourseEnrollments",
+            drawerLabel: "Enrollments",
             title: "CourseEnrollments",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="#808080" />
+              <FontAwesome name="home" size={25} color="black" />
             )
           }}
           component={CourseEnrollments}

@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } fr
 import { Entypo } from '@expo/vector-icons';
 import { Video } from 'expo-av';
 
-const Playvideos = ({ videourl, onClose }) => {
+const Playvideos = ({classno, title,videourl, onClose }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
-
+console.log(classno);
   const togglePlay = () => {
     if (videoRef.current !== null) {
       if (isPlaying) {
@@ -26,7 +26,7 @@ const Playvideos = ({ videourl, onClose }) => {
             <Entypo name="cross" size={24} color="blue" />
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
-          <Text>{videourl}hhh</Text>
+          {/* <Text>{videourl}hhh</Text> */}
         </View>
         <View style={styles.videoContainer}>
           <Video
@@ -37,9 +37,10 @@ const Playvideos = ({ videourl, onClose }) => {
             onPlaybackStatusUpdate={(status) => setIsPlaying(status.isPlaying)}
           />
           <TouchableOpacity onPress={togglePlay} style={styles.playButton}>
-            <Entypo name={isPlaying ? 'controller-paus' : 'controller-play'} size={36} color="blue" />
+            <Entypo style={isPlaying?styles.pause:styles.play} name={isPlaying ? 'controller-paus' : 'controller-play'} size={36} />
           </TouchableOpacity>
         </View>
+        <View style={{marginVertical:5,marginLeft:5}}><Text style={{fontSize:15,fontWeight:'bold'}}>Class {classno}: {title}</Text></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -61,17 +62,21 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   videoContainer: {
-    backgroundColor: 'gray',
+    flex: 1,
+    // backgroundColor: 'gray',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    // marginVertical: 20,
     width: '100%',
-    height: 300,
+    height: 500,
     position: 'relative',
+    // marginHorizontal:10,
+    padding:5
   },
   video: {
-    width: '100%',
+        width: '100%',
     height: '100%',
+    // aspectRatio: 10 / 9
   },
   playButton: {
     position: 'absolute',
@@ -79,6 +84,14 @@ const styles = StyleSheet.create({
     left: '50%',
     transform: [{ translateX: -18 }, { translateY: -18 }],
   },
+  pause:{
+    color:'transparent',
+  
+  },
+  play:{
+    color:'blue',
+  }
+
 });
 
 export default Playvideos;

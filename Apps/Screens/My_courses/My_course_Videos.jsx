@@ -7,6 +7,9 @@ const My_course_Videos = ({visible, product, onClose }) => {
 
 
     const [videoUrl, setVideoUrl] = useState('');
+    const [title,setTitle]=useState('');
+    const [classno,setClassno]=useState(0);
+
     const [VideoKeys,setVideokeys]=useState([]);
     useEffect(()=>{
         if(product.videoobjectlinks){
@@ -18,15 +21,19 @@ const My_course_Videos = ({visible, product, onClose }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const handlevideourl = (key) => {
+    const handlevideourl = (key,index) => {
         const url=product.videoobjectlinks[key];
         setModalVisible(true);
         setVideoUrl(url);
+        setTitle(key);
+        setClassno(index+1);
       };
 
       function handlemodalclose(){
         setModalVisible(false);
         setVideoUrl('');
+        setTitle('');
+        setClassno(0);
       }
 // if(!product.videoobjectlinks){
 //     return <Text>Classess of this course will be launched soon</Text>;
@@ -40,19 +47,20 @@ const My_course_Videos = ({visible, product, onClose }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContent}>
-          <Text style={{fontWeight:'bold',fontSize:14,marginTop:10}}>{product.c_title}</Text>
+          <Text style={{fontWeight:'bold',fontSize:14,marginTop:35,marginBottom:5}}>{product.c_title}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
            <Entypo name="cross" size={24} color="blue" /><Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
-          <View style={{ marginTop:5,display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',}}>
-<Text style={{fontSize:14,fontWeight:'bold'}}>S.No</Text>
-<Text style={{fontSize:14,fontWeight:'bold'}}>Class</Text>
+          <View style={{ marginTop:5,display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+<Text style={{fontSize:14,fontWeight:'bold',marginBottom:5,}}>Class</Text>
+{/* <Text style={{fontSize:14,fontWeight:'bold'}}>Class</Text> */}
           </View>
           <View style={{}}>
             {VideoKeys&& VideoKeys.length ? VideoKeys.map((item,index)=>
-            <View key={index} style={{marginVertical:5, display:'flex',flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start',}}>
-                <Text>{index+1}</Text>
-            <TouchableOpacity onPress={()=>handlevideourl(item)} ><Text style={{marginLeft:10,color:'blue',textDecorationLine:'underline'}}>{item}</Text></TouchableOpacity>
+            <View key={index} style={{marginVertical:5, display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'flex-start'}}>
+                {/* <Text>{index+1}</Text> */}
+            <TouchableOpacity ><Text style={{}}>{item}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={()=>handlevideourl(item,index)} ><Text style={{color:'blueviolet',textDecorationLine:'underline'}}>View</Text></TouchableOpacity> 
             </View>
             ):<Text>Classess of this course will be launched soon</Text>}
           </View>
@@ -67,12 +75,14 @@ const My_course_Videos = ({visible, product, onClose }) => {
         onRequestClose={() => {
             setModalVisible(false);
             setVideoUrl('');
+            setTitle('');
+            setClassno(0);
         }}
       >
         <ScrollView>
         {videoUrl && (
           <View>
-            <Playvideos videourl={videoUrl} onClose={handlemodalclose} />
+            <Playvideos classno={classno} title={title} videourl={videoUrl} onClose={handlemodalclose} />
           </View>
         )}
         </ScrollView>
@@ -92,7 +102,7 @@ const styles = StyleSheet.create({
     position:'relative',
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 20,
+    padding: 5,
     width: '90%',
     height: '90%',
   },
