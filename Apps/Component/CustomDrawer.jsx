@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { removeUserData } from '../Redux/action';
 import { View, Text, TouchableOpacity } from "react-native";
-import { FontAwesome5,FontAwesome, Entypo, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome5,FontAwesome, Entypo, SimpleLineIcons,Foundation,AntDesign,MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
@@ -144,7 +144,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Add Videos",
             title: "Add Course Video",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="black" />
+              <Foundation name="folder-add" size={25} color="black" />
             )
           }}
           component={Add_Videos}
@@ -155,7 +155,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "All Courses",
             title: "All Courses",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="black" />
+              <MaterialCommunityIcons name="format-list-checkbox" size={25} color="black" />
             )
           }}
           component={All_Courses}
@@ -166,7 +166,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Counselling",
             title: "CourseCounselling",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="black" />
+              <MaterialCommunityIcons name="account-box-multiple-outline" size={25} color="black" />
             )
           }}
           component={CourseCounselling}
@@ -177,7 +177,7 @@ const CustomHeader = ({ userData, removeUserData }) => {
             drawerLabel: "Enrollments",
             title: "CourseEnrollments",
             drawerIcon: () => (
-              <FontAwesome name="home" size={25} color="black" />
+              <AntDesign name="database" size={25} color="black" />
             )
           }}
           component={CourseEnrollments}
