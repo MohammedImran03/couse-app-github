@@ -28,3 +28,15 @@ export const createnewCoursedetails = (frmData) => {
 
   
 
+  export const UpdateCoursedetailsvideos = (id,frmData) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await axios.put('https://course-app-server.onrender.com/tunetutor/uploadvideoobjectlinks-Coursedetails/'+id, frmData);
+        console.log(result);
+        resolve(result.data);
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  };
