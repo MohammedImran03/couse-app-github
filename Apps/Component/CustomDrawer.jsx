@@ -14,7 +14,7 @@ import Add_Videos from '../Admin/Add_Videos';
 import All_Courses from '../Admin/All_Courses';
 import CourseEnrollments from '../Admin/CourseEnrollment';
 import CourseCounselling from '../Admin/CourseCounselling';
-
+import CourseEnrollment from '../Admin/CourseEnrollment';
 
 const CustomHeader = ({ userData, removeUserData }) => {
 
@@ -172,15 +172,15 @@ const CustomHeader = ({ userData, removeUserData }) => {
           component={CourseCounselling}
         />
          <Drawer.Screen
-          name="CourseEnrollments"
+          name="CourseEnrollment"
           options={{
             drawerLabel: "Enrollments",
-            title: "CourseEnrollments",
+            title: "Course Enrollment",
             drawerIcon: () => (
               <AntDesign name="database" size={25} color="black" />
             )
           }}
-          component={CourseEnrollments}
+          component={CourseEnrollment}
         />
       </Drawer.Navigator>
     </NavigationContainer>

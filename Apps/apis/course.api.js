@@ -22,3 +22,19 @@ export const createnewCourse = (frmData) => {
       }
     });
   };
+
+
+  
+
+  export const createnewcourseenrollment = (frmData) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await axios.post('https://course-app-server.onrender.com/tunetutor/addnewcounselling', frmData);
+        // console.log(result);
+        resolve(result.data);
+      } catch (error) {
+        // console.log(error);
+        reject(error);
+      }
+    });
+  };

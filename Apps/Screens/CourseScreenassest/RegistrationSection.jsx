@@ -1,8 +1,69 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React,{useEffect,useState} from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import {createnewcourseenrollment} from '../../apis/course.api';
+import {Feather} from '@expo/vector-icons';
+
 
 const RegistrationSection = () => {
+
+  // "name": "Praveen D",
+  //     "number": "8778413456",
+  //     "email": "praveenzambare22072002@gamail.com",
+  //     "status": 2
+  const [formValues, setFormValues] = useState({
+    name: '',
+    number: '',
+    email: '',
+    status: 0
+  });
+
+  const handleInputChange = (name, value) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async() => {
+    if(!formValues.name || ! formValues.number || !formValues.email){
+      Alert.alert('Invalid User Details', 'Please Provide Valid User Details');
+      return;
+    }
+    // console.log(formValues);
+    try {
+      setLoader(true);
+      const result = await createnewcourseenrollment(formValues);
+      // console.log(result);
+     if(result.success === true){
+      setFormValues({name: '',
+      number: '',
+      email: '',
+      status: 0});
+      setLoader(false);
+      Alert.alert('Enrollment Status :', `Counselling Data recorded Succesfully, our Team will Contat you Shortly` );
+      return;
+     }else{
+      setLoader(false);
+      Alert.alert('Enrollment Status :', result.response.data.message);
+      return;
+     }
+
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+      if(error.response){
+        Alert.alert('Enrollment Status Failed', error.response.data.message);
+        return;
+      }
+      else{
+        Alert.alert('Enrollment Status Failed', `${error.message}, Please Try again later`);
+        return;
+      }
+    }
+  };
+
+
   return (
     <View style={styles.registrationContainer}>
       <View style={styles.row}>
@@ -27,22 +88,30 @@ const RegistrationSection = () => {
                 placeholder="Name"
                 onFocus={() => {}}
                 onBlur={() => {}}
+                value={formValues.name}
+                onChangeText={(value) => handleInputChange('name', value)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Phone Number"
                 onFocus={() => {}}
                 onBlur={() => {}}
+                value={formValues.number}
+                onChangeText={(value) => handleInputChange('number', value)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Email Address"
                 onFocus={() => {}}
                 onBlur={() => {}}
+                value={formValues.email}
+                onChangeText={(value) => handleInputChange('email', value)}
               />
               <View style={{flex:1, alignItems:'center'}}>
-              <TouchableOpacity style={styles.submitButton}>
-                <Text style={styles.submitButtonText}>Submit</Text>
+              <TouchableOpacity  style={styles.submitButton}
+              onPress={handleSubmit}>
+                {loader?<Text style={styles.submitButtonText}>Loading <Feather name="loader" size={20} color="white" /></Text> : <Text style={styles.submitButtonText}>Submit</Text>}
+                {/* <Text style={styles.submitButtonText}>Submit</Text> */}
               </TouchableOpacity>
               </View>
             </View>
@@ -115,7 +184,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    color: '#000', // Set text color accordingly
+    color: 'black', 
+    backgroundColor:'rgb(220,220,220)'
   },
   submitButton: {
     marginVertical:15,

@@ -1,9 +1,67 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React,{useEffect,useState} from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView,Alert } from 'react-native';
 import { AntDesign,Feather } from '@expo/vector-icons';
 import Footer from '../Component/Footer';
+import {createnewcourseenrollment} from '../apis/course.api';
+// import {Feather} from '@expo/vector-icons';
 
 const Contacts=()=>{
+
+const [dummy,setDummy]=useState('');
+  const [formValues, setFormValues] = useState({
+    name: '',
+    number: '',
+    email: '',
+    status: 0,
+  });
+
+  const handleInputChange = (name, value) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async() => {
+    if(!formValues.name || ! formValues.number || !formValues.email){
+      Alert.alert('Invalid User Details', 'Please Provide Valid User Details');
+      return;
+    }
+    // console.log(formValues);
+    try {
+      setLoader(true);
+      const result = await createnewcourseenrollment(formValues);
+      // console.log(result);
+     if(result.success === true){
+      setFormValues({name: '',
+      number: '',
+      email: '',
+      status: 0});
+      setDummy('');
+      setLoader(false);
+      Alert.alert('Enrollment Status :', `Counselling Data recorded Succesfully, our Team will Contat you Shortly` );
+      return;
+     }else{
+      setLoader(false);
+      Alert.alert('Enrollment Status :', result.response.data.message);
+      return;
+     }
+
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+      if(error.response){
+        Alert.alert('Enrollment Status Failed', error.response.data.message);
+        return;
+      }
+      else{
+        Alert.alert('Enrollment Status Failed', `${error.message}, Please Try again later`);
+        return;
+      }
+    }
+  };
+
+
     return (
         <ScrollView>
           <View style={styles.container}>
@@ -43,27 +101,39 @@ const Contacts=()=>{
               <TextInput
                 style={styles.input}
                 placeholder="Enter your name"
+                value={formValues.name}
+                onChangeText={(value) => handleInputChange('name', value)}
               />
     
               <TextInput
                 style={styles.input}
                 placeholder="Enter email address"
                 keyboardType="email-address"
+                value={formValues.email}
+                onChangeText={(value) => handleInputChange('email', value)}
               />
     
-              <TextInput
+    <TextInput
                 style={styles.input}
-                placeholder="Enter subject"
+                placeholder="Phone Number"
+                onFocus={() => {}}
+                onBlur={() => {}}
+                value={formValues.number}
+                onChangeText={(value) => handleInputChange('number', value)}
               />
     
               <TextInput
                 style={[styles.input, styles.messageInput]}
                 placeholder="Enter Message"
                 multiline
+                value={dummy}
+                onChangeText={(value) => setDummy(value)}
               />
     
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Send Message</Text>
+              <TouchableOpacity style={styles.button}
+                onPress={handleSubmit}>
+                   {loader?<Text style={styles.buttonText}>Loading <Feather name="loader" size={20} color="white" /></Text> : <Text style={styles.buttonText}>Send Message</Text>}
+                {/* <Text style={styles.buttonText}>Send Message</Text> */}
               </TouchableOpacity>
             </View>
           </View>
