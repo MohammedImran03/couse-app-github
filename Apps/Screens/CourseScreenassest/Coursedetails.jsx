@@ -1,103 +1,58 @@
-import { View, Text,TouchableOpacity,StyleSheet,Image,Alert} from 'react-native'
+import { View, Text,StyleSheet,Image,Alert, TouchableOpacity, Linking} from 'react-native'
 import React from 'react'
 import {FontAwesome  } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import {UserPayment} from '../../apis/payment.api';
-import { useStripe } from '@stripe/stripe-react-native';
-import {createnewCourse} from '../../apis/course.api';
+
+
 
 
 const Coursedetails=({ blogId, onClose, CourseData,userData})=>{
+
+
+
+
   const coursepost = CourseData.find((blog) => blog._id === blogId);
     if (!coursepost) {
-        return <Text>Blog not found</Text>;
+        return <Text>Course not found</Text>;
       }
 
 
-      const { initPaymentSheet, presentPaymentSheet } = useStripe();   
-const Course_Enrollment=async()=>{
-  if(userData && userData._id){
+ 
 
-try {
-  const value = {
-    amount: parseInt(coursepost.c_fee),
-  };
-  const response = await UserPayment(value);
-  const client_secret = response.data.paymentIntent;
-  console.log(client_secret);
+
+      const handleOpenLink = async () => {
+        if (userData && userData._id) {
+          try {
+            const enrollmentData = {
+              user_id: userData._id,
+              // payment_id: client_secret,
+              amount: coursepost.c_fee,
+              product_id: coursepost._id,
+            };
+      
+            const queryString = Object.keys(enrollmentData)
+              .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(enrollmentData[key])}`)
+              .join('&');
+      
+            const url = `https://tunetutor-client-payment.netlify.app/home/?${queryString}`;
+               console.log(url);
+            await Linking.openURL(url);
+          } catch (error) {
+            console.error('Error opening link:', error);
+            Alert.alert('Error:', 'Failed to open the link.');
+          }
+        } else {
+          Alert.alert('Unauthorized Access:', 'Please Log In / Sign Up to Enroll the Course');
+        }
+      };
+
   
-  // if (response.error) {
-  //   Alert.alert('Payment Error : ', response.error);
-  //   return;
-  // }
-  
-  // // Initialize the Payment sheet
-  // const initResponse = await initPaymentSheet({
-  //   merchantDisplayName: 'Not Disclosed',
-  //   paymentIntentClientSecret: client_secret,
-  //   allowsDelayedPaymentMethods: true,
-  //   defaultBillingDetails: {
-  //     name: 'Jane Doe',
-  //   } 
-  // });
-  // console.log("initresponse",initResponse)
-  // console.log(initPaymentSheet)
-  // if (initResponse.error) {
-  //   console.log(initResponse.error);
-  //   Alert.alert('Something went wrong');
-  //   return;
-  // }
-
-  // // Present the Payment Sheet from Stripe
-  // const paymentResponse = await presentPaymentSheet();
-  // console.log(paymentResponse);
-  // if (paymentResponse.error) {
-  //   console.log(paymentResponse.error);
-  //   Alert.alert(
-  //     `Payment Error: ${paymentResponse.error.code}`,
-  //     paymentResponse.error.message
-  //   );
-  //   return;
-  // }
-  // console.log(presentPaymentSheet);
-  
-  // If payment is done, create the order
-
-  const enrollmentData = {
-    user_id: userData._id,
-    payment_id: client_secret,
-    amount: coursepost.c_fee,
-    product_id: coursepost._id,
-  };    
-  const result = await createnewCourse(enrollmentData);
- if(result.success === true){
-  Alert.alert('Course Enrollment Success:', result.message);
-  return;
- }else{
-  Alert.alert('Course Enrollment Satus:', result.response.data.message || result.message);
-  return;
- }
-
-
-} catch (error) {
-  if (error.response && error.response.data) {
-    Alert.alert('Payment Error : ', error.response.data);
-  } else {
-    Alert.alert('Payment Error : ', error.message);
-  }
-  return;
-}
-}
-else{
-   Alert.alert('Only Authorized Members are allowed : ', 'Please Log In / Sign Up to Enroll the Course');
-   return;
- }
-
-   }
-
+      
 
 
   return (
+  
+
     <View style={{padding:5, paddingBottom:30,}}>
         <View style={{marginVertical:5, marginHorizontal:2,flex:1,alignItems:'flex-start'}}>
     <TouchableOpacity onPress={onClose} style={{backgroundColor:'rgb(0,191,255)',borderRadius:5,padding:4,  flexDirection:'row',alignItems:'flex-start',paddingHorizontal:5,marginBottom:5}}>
@@ -142,14 +97,14 @@ else{
     <Text style={styles.option4}><Text>Rs.</Text> {coursepost.c_fee}</Text>
   </View>
   <View style={{marginTop:10,flex:1,alignItems:'center'}}>
-    <TouchableOpacity onPress={Course_Enrollment} style={{backgroundColor:'blueviolet',borderRadius:5,padding:4, flexDirection:'row',paddingHorizontal:5,marginBottom:5}}>
-      {/* <Text><MaterialIcons name="arrow-back-ios-new" size={25} color="blueviolet" /></Text> */}
+    <TouchableOpacity title="Open Link" onPress={handleOpenLink} style={{backgroundColor:'blueviolet',borderRadius:5,padding:4, flexDirection:'row',paddingHorizontal:5,marginBottom:5}}>
       <Text style={{fontSize:20,fontWeight:'bold', marginLeft:5,color:'white'}}>Enroll Course Rs.{coursepost.c_fee}</Text>
     </TouchableOpacity>
   </View>
 </View>
   </View>
     </View>
+
   )
 }
 

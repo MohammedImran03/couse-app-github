@@ -2,6 +2,9 @@ import React,{useState} from 'react';
 import { View, Text, Image, StyleSheet,Modal,ScrollView,TouchableOpacity } from 'react-native';
 import { Feather,FontAwesome  } from '@expo/vector-icons';
 import Coursedetails from './Coursedetails';
+import { StripeProvider } from '@stripe/stripe-react-native';
+
+
 
 const Course_cards=({CourseData})=>{
 
@@ -33,6 +36,10 @@ const Course_cards=({CourseData})=>{
     setSelectedBlogId(blogId);
     setModalVisible(true);
   };
+
+  const STRIPE_KEY="pk_test_51OuEqlSBQwTu3Sdv5c1NmGfDMn9IQ9UkykIyC1wTPFOOMa4vxTDb8qxO50Ce9Akxiv8fXYHMMcZSNYzHfvqK4kAY00oXR8dc66";
+
+
 
   return (<>
     <View style={styles.container}>
@@ -76,7 +83,11 @@ const Course_cards=({CourseData})=>{
         <ScrollView>
         {selectedBlogId && (
           <View>
-            <Coursedetails blogId={selectedBlogId} onClose={() => setModalVisible(false)} CourseData={CourseData} />
+
+             {/* <StripeProvider publishableKey={STRIPE_KEY}> */}
+             <Coursedetails blogId={selectedBlogId} onClose={() => setModalVisible(false)} CourseData={CourseData} />
+      {/* </StripeProvider> */}
+
           </View>
         )}
         </ScrollView>

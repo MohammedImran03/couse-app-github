@@ -6,7 +6,7 @@ import RegistrationSection from './CourseScreenassest/RegistrationSection';
 import OtherFeatureSection from './CourseScreenassest/OtherFeatures';
 import Course_cards from './CourseScreenassest/courecards';
 import axios from 'axios';
-
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 
 export default function Course() {
@@ -25,6 +25,8 @@ export default function Course() {
           console.log(error);
         }
       };
+
+      const STRIPE_KEY="pk_test_51OuEqlSBQwTu3Sdv5c1NmGfDMn9IQ9UkykIyC1wTPFOOMa4vxTDb8qxO50Ce9Akxiv8fXYHMMcZSNYzHfvqK4kAY00oXR8dc66";
 
   return (
   <ScrollView>
